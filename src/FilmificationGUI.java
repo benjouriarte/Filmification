@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -29,6 +30,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class FilmificationGUI extends javax.swing.JFrame 
 {
     private ArrayList<JLabel> screenshots = new ArrayList<JLabel>();
+    private Random rnd = new Random();
     private int numOfImages;
     private int currentIndex;
     private Timer t;
@@ -39,7 +41,9 @@ public class FilmificationGUI extends javax.swing.JFrame
         
         initComponents();
         
-        setNumOfImages(11);
+        //pls fix
+        //setNumOfImages(11); //Jacobi
+        setNumOfImages(6); //Multistage Network
         
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
@@ -335,7 +339,9 @@ public class FilmificationGUI extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_openFilmMenuItemActionPerformed
 
+    
     private void tileViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tileViewButtonActionPerformed
+        /* //jacobi
         try 
         {
             initScreenshots(getNumOfImages(), "screenshots", "5x5jrt", "png", true);
@@ -345,6 +351,17 @@ public class FilmificationGUI extends javax.swing.JFrame
         }
         
         addScreenshotsTileView(5, 3);
+        */
+         //Multistage Network
+        try 
+        {
+            initScreenshots(getNumOfImages(), "screenshots", getListOfImages(), "png", true);
+        } catch (URISyntaxException ex) 
+        {
+            Logger.getLogger(FilmificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        addScreenshotsTileView(3, 2);
     }//GEN-LAST:event_tileViewButtonActionPerformed
 
     private void fullViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullViewButtonActionPerformed
@@ -451,6 +468,7 @@ public class FilmificationGUI extends javax.swing.JFrame
         });
     }//GEN-LAST:event_playButtonActionPerformed
 
+        //Jacobi
     public void initScreenshots(int numOfImages, String folder, 
             String filenameStart, String fileExtension, boolean isTileView) throws URISyntaxException
     {
@@ -499,6 +517,51 @@ public class FilmificationGUI extends javax.swing.JFrame
         }
     }
     
+        //Multistage Network
+    public void initScreenshots(int numOfImages, String folder,
+            ArrayList<String> filename, String fileExtension, boolean isTileView) throws URISyntaxException {
+        getScreenshots().clear();
+
+        for (int i = 0; i < numOfImages; i++) {
+            BufferedImage img = null;
+            try {
+                String path = "/" + folder + "/" + filename.get(i) + "." + fileExtension;
+                img = ImageIO.read(new File(getClass().getResource(path).toURI()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            JLabel label = new JLabel();
+
+            if (isTileView) {
+                label.setSize(300, 210);
+                if (i == 0) {
+                    label.setText("Start");
+                } else if (i == numOfImages - 1) {
+                    label.setText("Multistage Network film " + i + " - End");
+                } else {
+                    label.setText("Multistage Network film " + i);
+                }
+
+                
+            } else {
+                label.setSize(800, 560);
+            }
+
+            img = toBufferedImage(img.getScaledInstance(label.getWidth(),
+                    label.getHeight(), Image.SCALE_SMOOTH));
+
+            ImageIcon imageIcon = new ImageIcon(img);
+            label.setIcon(imageIcon);
+
+            label.setHorizontalTextPosition(JLabel.CENTER);
+            label.setVerticalTextPosition(JLabel.BOTTOM);
+            label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+            screenshots.add(label);
+        }
+    }
+    
     public static BufferedImage toBufferedImage(Image img)
     {
         if (img instanceof BufferedImage)
@@ -541,6 +604,75 @@ public class FilmificationGUI extends javax.swing.JFrame
         
         tileViewPanel.revalidate();
         tileViewPanel.repaint();
+    }
+    
+    //Code needed for Multistage Network
+    public int createRowStart() {
+        return rnd.nextInt(4);
+    }
+
+    public String createInstruction() {
+        return Integer.toString(rnd.nextInt(2)) + Integer.toString(rnd.nextInt(2));
+    }
+
+    public ArrayList<String> getListOfImages() {
+        ArrayList<String> list = new ArrayList();
+        int start = createRowStart();
+        String instruction = createInstruction();
+
+        list.add("base");
+        list.add("input0" + Integer.toString(start));
+        list.add("decide0" + Integer.toString(start));
+
+        if (instruction.charAt(0) == '0') {
+            list.add("input1" + Integer.toString(start));
+            list.add("decide1" + Integer.toString(start));
+            if (instruction.charAt(1) == '0') {
+                list.add("input2" + Integer.toString(start));
+            } else {
+                switch (start) {
+                    case 0:
+                        list.add("input21");
+                        break;
+                    case 1:
+                        list.add("input20");
+                        break;
+                    case 2:
+                        list.add("input23");
+                        break;
+                    case 3:
+                        list.add("input22");
+                        break;
+                }
+            }
+        } else {
+            if (start < 2) {
+                list.add("input1" + Integer.toString(start + 2));
+                list.add("decide1" + Integer.toString(start + 2));
+                if (instruction.charAt(1) == '0') {
+                    list.add("input2" + Integer.toString(start + 2));
+                } else {
+                    if (start == 1) {
+                        list.add("input22");
+                    } else {
+                        list.add("input23");
+                    }
+                }
+            } else {
+                list.add("input1" + Integer.toString(start - 2));
+                list.add("decide1" + Integer.toString(start - 2));
+                if (instruction.charAt(1) == '0') {
+                    list.add("input2" + Integer.toString(start - 2));
+                } else {
+                    if (start == 3) {
+                        list.add("input20");
+                    } else {
+                        list.add("input21");
+                    }
+                }
+            }
+        }
+        return list;
     }
     
     // --------------- getters and setters --------------- //
