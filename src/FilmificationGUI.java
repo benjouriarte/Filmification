@@ -26,32 +26,31 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author Binge2
  */
+public class FilmificationGUI extends javax.swing.JFrame {
 
-public class FilmificationGUI extends javax.swing.JFrame 
-{
     private ArrayList<JLabel> screenshots = new ArrayList<JLabel>();
     private Random rnd = new Random();
+    private String ins;
     private int numOfImages;
     private int currentIndex;
     private Timer t;
-    
-    public FilmificationGUI() throws UnsupportedLookAndFeelException, ParseException 
-    {
+
+    public FilmificationGUI() throws UnsupportedLookAndFeelException, ParseException {
         UIManager.setLookAndFeel(new SyntheticaBlackMoonLookAndFeel());
-        
+
         initComponents();
-        
+
         //pls fix
         //setNumOfImages(11); //Jacobi
         setNumOfImages(6); //Multistage Network
-        
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        
+
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         prevButton.setEnabled(false);
         nextButton.setEnabled(false);
         playButton.setEnabled(false);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -325,8 +324,8 @@ public class FilmificationGUI extends javax.swing.JFrame
         setSize(new java.awt.Dimension(1034, 573));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    
-   
+
+
     private void fileMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fileMenuActionPerformed
@@ -339,185 +338,171 @@ public class FilmificationGUI extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_openFilmMenuItemActionPerformed
 
-    
+
     private void tileViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tileViewButtonActionPerformed
         /* //jacobi
-        try 
-        {
-            initScreenshots(getNumOfImages(), "screenshots", "5x5jrt", "png", true);
-        } catch (URISyntaxException ex) 
-        {
-            Logger.getLogger(FilmificationGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         try 
+         {
+         initScreenshots(getNumOfImages(), "screenshots", "5x5jrt", "png", true);
+         } catch (URISyntaxException ex) 
+         {
+         Logger.getLogger(FilmificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+         }
         
-        addScreenshotsTileView(5, 3);
-        */
-         //Multistage Network
-        try 
-        {
+         addScreenshotsTileView(5, 3);
+         */
+        //Multistage Network
+        try {
             initScreenshots(getNumOfImages(), "screenshots", getListOfImages(), "png", true);
-        } catch (URISyntaxException ex) 
-        {
+        } catch (URISyntaxException ex) {
             Logger.getLogger(FilmificationGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        addScreenshotsTileView(3, 2);
+
+        addScreenshotsTileView(2, 2);
     }//GEN-LAST:event_tileViewButtonActionPerformed
 
     private void fullViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullViewButtonActionPerformed
         tileViewPanel.setLayout(new java.awt.GridLayout(1, 1));
-        
+
         setCurrentIndex(0);
-        frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/" 
-                                    + getNumOfImages());
-        
+        frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/"
+                + getNumOfImages());
+
         prevButton.setEnabled(false);
         nextButton.setEnabled(true);
         playButton.setEnabled(true);
-        
-        try 
-        {
-            initScreenshots(getNumOfImages(), "screenshots", "5x5jrt", "png", false);
-        } catch (URISyntaxException ex) 
-        {
+
+        /* //Jacobi
+         try 
+         {
+         initScreenshots(getNumOfImages(), "screenshots", "5x5jrt", "png", false);
+         } catch (URISyntaxException ex) 
+         {
+         Logger.getLogger(FilmificationGUI.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
+        //Multistage Network
+        try {
+            initScreenshots(getNumOfImages(), "screenshots", getListOfImages(), "png", false);
+        } catch (URISyntaxException ex) {
             Logger.getLogger(FilmificationGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         addScreenshotsFullView(0);
     }//GEN-LAST:event_fullViewButtonActionPerformed
-    
+
     private void prevButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevButtonActionPerformed
-        if(getCurrentIndex() > 0)
-        {
+        if (getCurrentIndex() > 0) {
             addScreenshotsFullView(getCurrentIndex() - 1);
             setCurrentIndex(getCurrentIndex() - 1);
-            frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/" 
-                                    + getNumOfImages());
+            frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/"
+                    + getNumOfImages());
         }
-        
+
         updatePrevAndNext();
     }//GEN-LAST:event_prevButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
-        if(getCurrentIndex() < getNumOfImages())
-        {
+        if (getCurrentIndex() < getNumOfImages()) {
             addScreenshotsFullView(getCurrentIndex() + 1);
             setCurrentIndex(getCurrentIndex() + 1);
-            frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/" 
-                                    + getNumOfImages());
+            frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/"
+                    + getNumOfImages());
         }
-        
+
         updatePrevAndNext();
     }//GEN-LAST:event_nextButtonActionPerformed
 
-    public void updatePrevAndNext()
-    {
-        if(getCurrentIndex() < (getNumOfImages() - 1))
-        {
+    public void updatePrevAndNext() {
+        if (getCurrentIndex() < (getNumOfImages() - 1)) {
             nextButton.setEnabled(true);
-        }
-        else
-        {
+        } else {
             nextButton.setEnabled(false);
         }
-        
-        if(getCurrentIndex() > 0)
-        {
+
+        if (getCurrentIndex() > 0) {
             prevButton.setEnabled(true);
-        }
-        else
-        {
+        } else {
             prevButton.setEnabled(false);
         }
     }
-    
+
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         tileViewPanel.setLayout(new java.awt.GridLayout(1, 1));
-       
+
         setCurrentIndex(0);
         prevButton.setEnabled(false);
         nextButton.setEnabled(false);
         playButton.setEnabled(false);
-        
+
         JComponent myComponent = tileViewPanel;
-       
+
         final Timer timer = new Timer(1500, null);
         timer.start();
-       
-        timer.addActionListener(new ActionListener() 
-        {
-            public void actionPerformed(ActionEvent evt) 
-            {
-                if(getCurrentIndex() == getScreenshots().size() - 1)
-                {
+
+        timer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (getCurrentIndex() == getScreenshots().size() - 1) {
                     timer.stop();
-                    
+
                     playButton.setEnabled(true);
                     updatePrevAndNext();
                 }
-                
+
                 tileViewPanel.removeAll();
                 tileViewPanel.add(getScreenshots().get(getCurrentIndex()));
-                frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/" 
-                                    + getNumOfImages());
+                frameNumberTextField.setText(String.valueOf(getCurrentIndex() + 1) + "/"
+                        + getNumOfImages());
                 setCurrentIndex(getCurrentIndex() + 1);
-                
+
                 myComponent.revalidate();
                 myComponent.repaint();
             }
         });
     }//GEN-LAST:event_playButtonActionPerformed
 
-        //Jacobi
-    public void initScreenshots(int numOfImages, String folder, 
-            String filenameStart, String fileExtension, boolean isTileView) throws URISyntaxException
-    {
+    //Jacobi
+    public void initScreenshots(int numOfImages, String folder,
+            String filenameStart, String fileExtension, boolean isTileView) throws URISyntaxException {
         getScreenshots().clear();
-        
-        for (int i = 1; i <= numOfImages; i++)
-        {
+
+        for (int i = 1; i <= numOfImages; i++) {
             BufferedImage img = null;
-            try 
-            {
+            try {
                 String path = "/" + folder + "/" + filenameStart + i + "." + fileExtension;
                 img = ImageIO.read(new File(getClass().getResource(path).toURI()));
-            } catch (IOException e) 
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            
-            JLabel label = new JLabel(); 
-            
-            if(isTileView)
-            {
+
+            JLabel label = new JLabel();
+
+            if (isTileView) {
                 label.setSize(300, 210);
                 label.setText("JRT Frame Number " + i);
-                
-                if(i == 1 || i == 2 || i == 11)
-                {
+
+                if (i == 1 || i == 2 || i == 11) {
                     screenshots.add(new JLabel());
                 }
-            }
-            else
-            {
+            } else {
                 label.setSize(800, 560);
             }
-            
-            img = toBufferedImage(img.getScaledInstance(label.getWidth(), 
+
+            img = toBufferedImage(img.getScaledInstance(label.getWidth(),
                     label.getHeight(), Image.SCALE_SMOOTH));
-            
+
             ImageIcon imageIcon = new ImageIcon(img);
             label.setIcon(imageIcon);
-            
+
             label.setHorizontalTextPosition(JLabel.CENTER);
             label.setVerticalTextPosition(JLabel.BOTTOM);
             label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            
+
             screenshots.add(label);
         }
     }
-    
-        //Multistage Network
+
+    //Multistage Network
     public void initScreenshots(int numOfImages, String folder,
             ArrayList<String> filename, String fileExtension, boolean isTileView) throws URISyntaxException {
         getScreenshots().clear();
@@ -536,14 +521,16 @@ public class FilmificationGUI extends javax.swing.JFrame
             if (isTileView) {
                 label.setSize(300, 210);
                 if (i == 0) {
-                    label.setText("Start");
+                    label.setText("Start - Starting Row: " + (Integer.parseInt("" + filename.get(i + 1).charAt(6)) + 1) + 
+                            " +  Instruction: " + ins);
                 } else if (i == numOfImages - 1) {
                     label.setText("Multistage Network film " + i + " - End");
+                } else if (filename.get(i).contains("decide")) {
+                    label.setText("Multistage Network film " + i + " - Instruction: " + ins.charAt((i / 2) - 1));
                 } else {
                     label.setText("Multistage Network film " + i);
                 }
 
-                
             } else {
                 label.setSize(800, 560);
             }
@@ -561,11 +548,9 @@ public class FilmificationGUI extends javax.swing.JFrame
             screenshots.add(label);
         }
     }
-    
-    public static BufferedImage toBufferedImage(Image img)
-    {
-        if (img instanceof BufferedImage)
-        {
+
+    public static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
             return (BufferedImage) img;
         }
 
@@ -580,54 +565,52 @@ public class FilmificationGUI extends javax.swing.JFrame
         // Return the buffered image
         return bimage;
     }
-    
-    public void addScreenshotsTileView(int rows, int columns)
-    {
+
+    public void addScreenshotsTileView(int rows, int columns) {
         tileViewPanel.removeAll();
-        
+
         tileViewPanel.setLayout(new java.awt.GridLayout(rows, columns));
-        
-        for(int i = 0; i < getScreenshots().size(); i++)
-        {
+
+        for (int i = 0; i < getScreenshots().size(); i++) {
             tileViewPanel.add(getScreenshots().get(i));
         }
-        
+
         tileViewPanel.revalidate();
         tileViewPanel.repaint();
     }
-    
-    public void addScreenshotsFullView(int index)
-    {
+
+    public void addScreenshotsFullView(int index) {
         tileViewPanel.removeAll();
-        
+
         tileViewPanel.add(getScreenshots().get(index));
-        
+
         tileViewPanel.revalidate();
         tileViewPanel.repaint();
     }
-    
-    //Code needed for Multistage Network
+
+    //Codes needed for Multistage Network
     public int createRowStart() {
         return rnd.nextInt(4);
     }
 
-    public String createInstruction() {
-        return Integer.toString(rnd.nextInt(2)) + Integer.toString(rnd.nextInt(2));
+    public void createInstruction() {
+        ins = Integer.toString(rnd.nextInt(2)) + Integer.toString(rnd.nextInt(2));
+        //System.out.println("ins created: " + ins);
     }
 
     public ArrayList<String> getListOfImages() {
         ArrayList<String> list = new ArrayList();
         int start = createRowStart();
-        String instruction = createInstruction();
+        createInstruction();
 
         list.add("base");
         list.add("input0" + Integer.toString(start));
         list.add("decide0" + Integer.toString(start));
 
-        if (instruction.charAt(0) == '0') {
+        if (ins.charAt(0) == '0') {
             list.add("input1" + Integer.toString(start));
             list.add("decide1" + Integer.toString(start));
-            if (instruction.charAt(1) == '0') {
+            if (ins.charAt(1) == '0') {
                 list.add("input2" + Integer.toString(start));
             } else {
                 switch (start) {
@@ -649,7 +632,7 @@ public class FilmificationGUI extends javax.swing.JFrame
             if (start < 2) {
                 list.add("input1" + Integer.toString(start + 2));
                 list.add("decide1" + Integer.toString(start + 2));
-                if (instruction.charAt(1) == '0') {
+                if (ins.charAt(1) == '0') {
                     list.add("input2" + Integer.toString(start + 2));
                 } else {
                     if (start == 1) {
@@ -661,7 +644,7 @@ public class FilmificationGUI extends javax.swing.JFrame
             } else {
                 list.add("input1" + Integer.toString(start - 2));
                 list.add("decide1" + Integer.toString(start - 2));
-                if (instruction.charAt(1) == '0') {
+                if (ins.charAt(1) == '0') {
                     list.add("input2" + Integer.toString(start - 2));
                 } else {
                     if (start == 3) {
@@ -674,9 +657,8 @@ public class FilmificationGUI extends javax.swing.JFrame
         }
         return list;
     }
-    
-    // --------------- getters and setters --------------- //
 
+    // --------------- getters and setters --------------- //
     public ArrayList<JLabel> getScreenshots() {
         return screenshots;
     }
@@ -708,7 +690,7 @@ public class FilmificationGUI extends javax.swing.JFrame
     public void setT(Timer t) {
         this.t = t;
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup elementTypeButtonGroup;
     private javax.swing.JMenuItem exitMenuItem;
